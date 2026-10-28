@@ -28,8 +28,12 @@ const menus = {
   mains: [['Supper table','Slow-roasted lamb shoulder, rosemary potatoes and vibrant seasonal vegetables.'],['From the garden','Herb-roasted chicken, buttery greens and lemon pan jus.'],['Plant-forward','Roasted squash & lentil Wellington with sage gravy.']],
   sweet: [['Celebration cake','Vanilla bean, chocolate ganache, lemon elderflower and seasonal fruit tiers.'],['After dinner','Mini pavlovas, espresso pots and bite-sized financiers.'],['The finishing touch','Cheese selection, spiced chutney, grapes and artisan crackers.']]
 };
+const packageImages = ['luxury', 'premium', 'deluxe', 'classic', 'home-dinner', 'braai'];
 function renderMenu(key) {
-  document.querySelector('#menuContent').innerHTML = menus[key].map((item, index) => `<article class="dish"><span class="dish-number">0${index + 1}</span><h3>${item[0]}</h3><p>${item[1]}</p></article>`).join('');
+  document.querySelector('#menuContent').innerHTML = menus[key].map((item, index) => {
+    const image = key === 'packages' ? `<img class="dish-image" src="assets/images/${packageImages[index]}-package.webp" alt="${item[0]}" loading="lazy">` : '';
+    return `<article class="dish">${image}<span class="dish-number">0${index + 1}</span><h3>${item[0]}</h3><p>${item[1]}</p></article>`;
+  }).join('');
 }
 document.querySelectorAll('[data-menu]').forEach(button => button.addEventListener('click', () => {
   document.querySelectorAll('[data-menu]').forEach(item => item.classList.remove('active'));
@@ -38,32 +42,55 @@ document.querySelectorAll('[data-menu]').forEach(button => button.addEventListen
 }));
 renderMenu('packages');
 
-const symbols = ['🥂','🍰','🌿','🕯️'];
-const board = document.querySelector('#memoryBoard');
-let flipped = [], moves = 0, matched = 0, timerSeconds = 0, timerId;
+const treats = [
+  { emoji: '🍰', name: 'cake' }, { emoji: '🍓', name: 'strawberry' },
+  { emoji: '🍕', name: 'pizza' }, { emoji: '🥂', name: 'celebration glasses' },
+  { emoji: '🧁', name: 'cupcake' }, { emoji: '🍇', name: 'grapes' },
+  { emoji: '🍪', name: 'cookie' }, { emoji: '🍍', name: 'pineapple' }
+];
+const gameBoard = document.querySelector('#board');
+const gameMoves = document.querySelector('#moves');
+const gamePairs = document.querySelector('#pairs');
+const gameTimer = document.querySelector('#timer');
+const gameStatus = document.querySelector('#status');
+const gameStart = document.querySelector('#start-btn');
+const gameRestart = document.querySelector('#restart-btn');
+let firstCard = null, secondCard = null, gameLocked = true, gamePairsFound = 0;
+let gameStarted = false, gameFinished = false, gameSeconds = 0, gameTick = null, mismatchTimeout = null;
 
-function formatTime(seconds) { return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`; }
-function restartGame() {
-  clearInterval(timerId); timerSeconds = 0; moves = 0; matched = 0; flipped = [];
-  document.querySelector('#moves').textContent = '0'; document.querySelector('#timer').textContent = '0:00';
-  const cards = [...symbols, ...symbols].sort(() => Math.random() - .5);
-  board.innerHTML = cards.map((symbol, index) => `<button class="card" data-symbol="${symbol}" data-index="${index}" aria-label="Hidden card"><span class="card-inner"><span class="card-face card-back">A&amp;A</span><span class="card-face card-front">${symbol}</span></span></button>`).join('');
+function shuffleGame(items) { const copy = [...items]; for (let i = copy.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [copy[i], copy[j]] = [copy[j], copy[i]]; } return copy; }
+function gameTime(value) { return `${String(Math.floor(value / 60)).padStart(2, '0')}:${String(value % 60).padStart(2, '0')}`; }
+function updateGameStats() { gameMoves.textContent = gameMovesCount; gamePairs.textContent = `${gamePairsFound} / ${treats.length}`; gameTimer.textContent = gameTime(gameSeconds); }
+let gameMovesCount = 0;
+function stopGameClock() { if (gameTick) clearInterval(gameTick); gameTick = null; }
+function startGameClock() { if (gameTick || gameFinished) return; gameTick = setInterval(() => { gameSeconds++; gameTimer.textContent = gameTime(gameSeconds); }, 1000); }
+function newGame() {
+  stopGameClock(); if (mismatchTimeout) clearTimeout(mismatchTimeout);
+  firstCard = secondCard = null; gameLocked = true; gameMovesCount = gamePairsFound = gameSeconds = 0; gameStarted = gameFinished = false;
+  updateGameStats(); gameStart.disabled = false; gameStart.textContent = '✨ Start playing'; gameStatus.textContent = 'Tap “Start playing” when you’re ready.';
+  gameBoard.innerHTML = '';
+  shuffleGame([...treats, ...treats].map((treat, index) => ({ ...treat, uid: `${treat.name}-${index}-${Math.random().toString(16).slice(2)}` }))).forEach((item, index) => {
+    const card = document.createElement('button'); card.type = 'button'; card.className = 'game-card'; card.disabled = true; card.dataset.name = item.name; card.setAttribute('aria-label', `Hidden card ${index + 1}`);
+    card.innerHTML = `<span class="game-card-inner"><span class="game-card-face game-card-back" aria-hidden="true"></span><span class="game-card-face game-card-front" aria-hidden="true">${item.emoji}</span></span>`;
+    card.addEventListener('click', () => flipGameCard(card, item, index)); gameBoard.appendChild(card);
+  });
 }
-board.addEventListener('click', event => {
-  const card = event.target.closest('.card');
-  if (!card || card.classList.contains('flipped') || card.classList.contains('matched') || flipped.length === 2) return;
-  if (!timerId && matched === 0) timerId = setInterval(() => { timerSeconds++; document.querySelector('#timer').textContent = formatTime(timerSeconds); }, 1000);
-  card.classList.add('flipped'); flipped.push(card);
-  if (flipped.length === 2) {
-    moves++; document.querySelector('#moves').textContent = moves;
-    if (flipped[0].dataset.symbol === flipped[1].dataset.symbol) {
-      flipped.forEach(item => item.classList.add('matched')); flipped = []; matched += 2;
-      if (matched === 8) { clearInterval(timerId); timerId = null; setTimeout(() => alert(`Beautiful work! You matched every pair in ${moves} moves and ${formatTime(timerSeconds)}.`), 350); }
-    } else setTimeout(() => { flipped.forEach(item => item.classList.remove('flipped')); flipped = []; }, 800);
-  }
-});
-document.querySelector('#restartGame').addEventListener('click', restartGame);
-restartGame();
+function beginGame() { if (gameStarted || gameFinished) return; gameStarted = true; gameLocked = false; [...gameBoard.children].forEach(card => card.disabled = false); gameStart.disabled = true; gameStart.textContent = 'Game in progress…'; gameStatus.textContent = 'Find two treats that match. Good luck!'; startGameClock(); }
+function flipGameCard(card, item, index) {
+  if (!gameStarted) beginGame(); if (gameLocked || card.classList.contains('is-open') || card.classList.contains('is-matched')) return;
+  card.classList.add('is-open'); card.setAttribute('aria-label', item.name);
+  if (!firstCard) { firstCard = { card, item, index }; return; }
+  secondCard = { card, item, index }; gameLocked = true; gameMovesCount++; updateGameStats();
+  if (firstCard.item.name === secondCard.item.name) {
+    [firstCard, secondCard].forEach(entry => { entry.card.classList.remove('is-open'); entry.card.classList.add('is-matched'); entry.card.disabled = true; entry.card.setAttribute('aria-label', `Matched ${entry.item.name}`); });
+    gamePairsFound++; updateGameStats(); gameStatus.innerHTML = '<strong>Lovely match!</strong> Keep going.'; firstCard = secondCard = null; gameLocked = false;
+    if (gamePairsFound === treats.length) winGame();
+  } else { gameStatus.textContent = 'Not a match this time. Try to remember where they are!'; mismatchTimeout = setTimeout(() => { [firstCard, secondCard].forEach(entry => { entry.card.classList.remove('is-open'); entry.card.setAttribute('aria-label', `Hidden card ${entry.index + 1}`); }); firstCard = secondCard = null; gameLocked = false; }, 850); }
+}
+function winGame() { gameFinished = true; gameLocked = true; stopGameClock(); gameStart.disabled = false; gameStart.textContent = '🎉 Play again'; const rating = gameMovesCount <= 12 ? 'event-planning superstar' : gameMovesCount <= 18 ? 'dessert detective' : 'treat-matching pro'; gameStatus.innerHTML = `<strong>You did it!</strong> All treats matched in ${gameMovesCount} moves and ${gameTime(gameSeconds)}. You’re a ${rating}!`; }
+gameStart.addEventListener('click', () => { if (gameFinished) { newGame(); beginGame(); return; } beginGame(); });
+gameRestart.addEventListener('click', newGame);
+newGame();
 
 document.querySelector('#contactForm').addEventListener('submit', event => {
   event.preventDefault();
