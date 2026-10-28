@@ -71,3 +71,65 @@ document.querySelector('#contactForm').addEventListener('submit', event => {
 });
 document.querySelector('#year').textContent = new Date().getFullYear();
 showPage(location.hash.slice(1) || 'home');
+
+const themeButtons = document.querySelectorAll('[data-theme]');
+function setTheme(theme) {
+  document.body.dataset.theme = ['light', 'dark', 'gold'].includes(theme) ? theme : 'light';
+  localStorage.setItem('aa-theme', document.body.dataset.theme);
+  themeButtons.forEach(button => {
+    const active = button.dataset.theme === document.body.dataset.theme;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
+  });
+}
+themeButtons.forEach(button => button.addEventListener('click', () => setTheme(button.dataset.theme)));
+setTheme(localStorage.getItem('aa-theme') || 'light');
+
+const galleryFiles = [
+  'assets/images/Screenshot 2026-10-28 at 22.34.13.png',
+  'assets/images/Screenshot 2026-10-28 at 22.34.17.png',
+  'assets/images/Screenshot 2026-10-28 at 22.34.29.png',
+  'assets/images/Screenshot 2026-10-28 at 22.34.53.png',
+  'assets/images/Screenshot 2026-10-28 at 22.34.58.png',
+  'assets/images/Screenshot 2026-10-28 at 22.35.02.png',
+  'assets/images/Screenshot 2026-10-28 at 22.35.20.png',
+  'assets/images/Screenshot 2026-10-28 at 22.35.29.png',
+  'assets/images/Screenshot 2026-10-28 at 22.35.49.png',
+  'assets/images/Screenshot 2026-10-28 at 22.35.53.png',
+  'assets/images/Screenshot 2026-10-28 at 22.35.57.png',
+  'assets/images/Screenshot 2026-10-28 at 22.36.00.png',
+  'assets/images/Screenshot 2026-10-28 at 22.36.03.png',
+  'assets/images/Screenshot 2026-10-28 at 22.36.14.png',
+  'assets/images/Screenshot 2026-10-28 at 22.36.21.png',
+  'assets/images/Screenshot 2026-10-28 at 22.36.26.png',
+  'assets/images/Screenshot 2026-10-28 at 22.36.30.png',
+  'assets/images/Screenshot 2026-10-28 at 22.36.32.png',
+  'assets/images/Screenshot 2026-10-28 at 22.36.35.png',
+  'assets/images/Screenshot 2026-10-28 at 22.36.42.png',
+  'assets/images/Screenshot 2026-10-28 at 22.36.53.png',
+  'assets/images/Screenshot 2026-10-28 at 22.36.58.png',
+  'assets/images/Screenshot 2026-10-28 at 22.37.02.png',
+  'assets/images/Screenshot 2026-10-28 at 22.37.06.png',
+  'assets/images/Screenshot 2026-10-28 at 22.37.09.png',
+  'assets/images/Screenshot 2026-10-28 at 22.37.26.png',
+  'assets/images/Screenshot 2026-10-28 at 22.37.29.png',
+  'assets/images/Screenshot 2026-10-28 at 22.37.31.png',
+  'assets/images/Screenshot 2026-10-28 at 22.37.34.png',
+  'assets/images/Screenshot 2026-10-28 at 22.37.48.png',
+  'assets/images/Screenshot 2026-10-28 at 22.37.59.png',
+  'assets/images/Screenshot 2026-10-28 at 22.38.10.png',
+  'assets/images/Screenshot 2026-10-28 at 22.38.14.png',
+  'assets/images/Screenshot 2026-10-28 at 22.38.16.png',
+  'assets/images/Screenshot 2026-10-28 at 22.38.32.png',
+  'assets/images/Screenshot 2026-10-28 at 22.38.36.png',
+  'assets/images/Screenshot 2026-10-28 at 22.38.51.png',
+  'assets/images/Screenshot 2026-10-28 at 22.38.56.png',
+  'assets/images/Screenshot 2026-10-28 at 22.38.58.png',
+  'assets/images/Screenshot 2026-10-28 at 22.39.02.png',
+  'assets/images/Screenshot 2026-10-28 at 22.39.04.png'
+];
+const galleryGrid = document.querySelector('#galleryGrid');
+if (galleryGrid) {
+  galleryGrid.innerHTML = galleryFiles.map((src, index) => `<button class="gallery-item" type="button" aria-label="Open gallery image ${index + 1}"><img src="${src}" alt="A&A Events celebration ${index + 1}" loading="lazy"></button>`).join('');
+  galleryGrid.querySelectorAll('.gallery-item').forEach(item => item.addEventListener('click', () => window.open(item.querySelector('img').src, '_blank', 'noopener,noreferrer')));
+}
