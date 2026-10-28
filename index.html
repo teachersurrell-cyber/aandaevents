@@ -6,10 +6,12 @@
   <meta name="description" content="A&A Events creates beautiful catered celebrations and memorable events.">
   <title>A&A Events | Catering & Celebrations</title>
   <link rel="icon" href="favicon.webp">
+  <link rel="preload" href="hero.webp" as="image" fetchpriority="high">
+  <link rel="preload" href="assets/images/founders.webp" as="image" fetchpriority="low">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
   <header class="site-header" id="siteHeader">
@@ -28,7 +30,7 @@
   <main>
     <section class="page active" id="home">
       <div class="hero">
-        <img src="hero.webp" alt="Elegant A&A Events table setting" class="hero-image">
+        <img src="hero.webp" alt="Elegant A&A Events table setting" class="hero-image" fetchpriority="high" decoding="async">
         <div class="hero-shade"></div>
         <div class="hero-copy">
           <p class="eyebrow">Catering · Events · Experiences</p>
@@ -52,7 +54,7 @@
 
     <section class="page inner-page" id="about">
       <header class="page-header"><p class="eyebrow dark">Our story</p><h1>Made with heart.<br><em>Served with joy.</em></h1></header>
-      <div class="about-feature"><div class="about-art founder-art"><img src="assets/images/founders.jpeg" alt="Founders of A&A Events"></div><div class="about-text"><p class="eyebrow dark">How it all began</p><h2>Your moments are<br>our favourite occasions.</h2><p>A&amp;A Events was founded by <strong>Dr. Ashley Nyemba-Ahmed</strong>, a medical doctor and caterer, and <strong>Ms. Amanda Nyemba LLB</strong>, a legal professional and events organiser.</p><p>A&amp;A Events began around a family table, with the belief that the most memorable gatherings aren't only about what's on the plate—they're about how people feel.</p><p>Today, our team brings that same warmth to weddings, corporate events, birthdays and intimate celebrations. We listen closely, cook thoughtfully and handle every detail so you can be fully present.</p></div></div>
+      <div class="about-feature"><div class="about-art founder-art"><img src="assets/images/founders.webp" alt="Founders of A&A Events" decoding="async"></div><div class="about-text"><p class="eyebrow dark">How it all began</p><h2>Your moments are<br>our favourite occasions.</h2><p>A&amp;A Events was founded by <strong>Dr. Ashley Nyemba-Ahmed</strong>, a medical doctor and caterer, and <strong>Ms. Amanda Nyemba LLB</strong>, a legal professional and events organiser.</p><p>A&amp;A Events began around a family table, with the belief that the most memorable gatherings aren't only about what's on the plate—they're about how people feel.</p><p>Today, our team brings that same warmth to weddings, corporate events, birthdays and intimate celebrations. We listen closely, cook thoughtfully and handle every detail so you can be fully present.</p></div></div>
       <div class="values"><article><span>01</span><h3>Thoughtful</h3><p>Personal choices, considered details.</p></article><article><span>02</span><h3>Joyful</h3><p>Hospitality that feels genuinely warm.</p></article><article><span>03</span><h3>Effortless</h3><p>One calm team from idea to event day.</p></article></div>
     </section>
 
@@ -85,6 +87,6 @@
     </section>
   </main>
   <footer><a class="brand footer-brand" href="#home" data-page="home"><span>A<span class="brand-amp">&amp;</span>A</span><small>EVENTS</small></a><p>Good food. Great people.<br>Beautiful moments.</p><a href="#contact" data-page="contact">Plan an event ↗</a><small>© <span id="year"></span> A&amp;A Events</small></footer>
-  <script src="script.js"></script>
+  <script src="script.js?v=3"></script>
 </body>
 </html>

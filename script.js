@@ -86,50 +86,57 @@ themeButtons.forEach(button => button.addEventListener('click', () => setTheme(b
 setTheme(localStorage.getItem('aa-theme') || 'light');
 
 const galleryFiles = [
-  'assets/images/Screenshot 2026-10-28 at 22.34.13.png',
-  'assets/images/Screenshot 2026-10-28 at 22.34.17.png',
-  'assets/images/Screenshot 2026-10-28 at 22.34.29.png',
-  'assets/images/Screenshot 2026-10-28 at 22.34.53.png',
-  'assets/images/Screenshot 2026-10-28 at 22.34.58.png',
-  'assets/images/Screenshot 2026-10-28 at 22.35.02.png',
-  'assets/images/Screenshot 2026-10-28 at 22.35.20.png',
-  'assets/images/Screenshot 2026-10-28 at 22.35.29.png',
-  'assets/images/Screenshot 2026-10-28 at 22.35.49.png',
-  'assets/images/Screenshot 2026-10-28 at 22.35.53.png',
-  'assets/images/Screenshot 2026-10-28 at 22.35.57.png',
-  'assets/images/Screenshot 2026-10-28 at 22.36.00.png',
-  'assets/images/Screenshot 2026-10-28 at 22.36.03.png',
-  'assets/images/Screenshot 2026-10-28 at 22.36.14.png',
-  'assets/images/Screenshot 2026-10-28 at 22.36.21.png',
-  'assets/images/Screenshot 2026-10-28 at 22.36.26.png',
-  'assets/images/Screenshot 2026-10-28 at 22.36.30.png',
-  'assets/images/Screenshot 2026-10-28 at 22.36.32.png',
-  'assets/images/Screenshot 2026-10-28 at 22.36.35.png',
-  'assets/images/Screenshot 2026-10-28 at 22.36.42.png',
-  'assets/images/Screenshot 2026-10-28 at 22.36.53.png',
-  'assets/images/Screenshot 2026-10-28 at 22.36.58.png',
-  'assets/images/Screenshot 2026-10-28 at 22.37.02.png',
-  'assets/images/Screenshot 2026-10-28 at 22.37.06.png',
-  'assets/images/Screenshot 2026-10-28 at 22.37.09.png',
-  'assets/images/Screenshot 2026-10-28 at 22.37.26.png',
-  'assets/images/Screenshot 2026-10-28 at 22.37.29.png',
-  'assets/images/Screenshot 2026-10-28 at 22.37.31.png',
-  'assets/images/Screenshot 2026-10-28 at 22.37.34.png',
-  'assets/images/Screenshot 2026-10-28 at 22.37.48.png',
-  'assets/images/Screenshot 2026-10-28 at 22.37.59.png',
-  'assets/images/Screenshot 2026-10-28 at 22.38.10.png',
-  'assets/images/Screenshot 2026-10-28 at 22.38.14.png',
-  'assets/images/Screenshot 2026-10-28 at 22.38.16.png',
-  'assets/images/Screenshot 2026-10-28 at 22.38.32.png',
-  'assets/images/Screenshot 2026-10-28 at 22.38.36.png',
-  'assets/images/Screenshot 2026-10-28 at 22.38.51.png',
-  'assets/images/Screenshot 2026-10-28 at 22.38.56.png',
-  'assets/images/Screenshot 2026-10-28 at 22.38.58.png',
-  'assets/images/Screenshot 2026-10-28 at 22.39.02.png',
-  'assets/images/Screenshot 2026-10-28 at 22.39.04.png'
+  'assets/images/Screenshot 2026-10-28 at 22.34.13.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.34.17.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.34.29.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.34.53.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.34.58.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.35.02.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.35.20.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.35.29.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.35.49.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.35.53.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.35.57.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.36.00.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.36.03.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.36.14.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.36.21.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.36.26.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.36.30.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.36.32.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.36.35.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.36.42.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.36.53.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.36.58.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.37.02.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.37.06.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.37.09.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.37.26.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.37.29.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.37.31.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.37.34.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.37.48.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.37.59.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.38.10.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.38.14.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.38.16.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.38.32.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.38.36.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.38.51.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.38.56.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.38.58.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.39.02.webp',
+  'assets/images/Screenshot 2026-10-28 at 22.39.04.webp'
 ];
 const galleryGrid = document.querySelector('#galleryGrid');
 if (galleryGrid) {
-  galleryGrid.innerHTML = galleryFiles.map((src, index) => `<button class="gallery-item" type="button" aria-label="Open gallery image ${index + 1}"><img src="${src}" alt="A&A Events celebration ${index + 1}" loading="lazy"></button>`).join('');
+  galleryGrid.innerHTML = galleryFiles.map((src, index) => `<button class="gallery-item" type="button" aria-label="Open gallery image ${index + 1}"><img src="${src}" alt="A&A Events celebration ${index + 1}" loading="lazy" decoding="async"></button>`).join('');
+  const warmImageCache = () => galleryFiles.slice(0, 12).forEach(src => {
+    const preload = new Image();
+    preload.decoding = 'async';
+    preload.src = src;
+  });
+  if ('requestIdleCallback' in window) window.requestIdleCallback(warmImageCache, { timeout: 1500 });
+  else setTimeout(warmImageCache, 500);
   galleryGrid.querySelectorAll('.gallery-item').forEach(item => item.addEventListener('click', () => window.open(item.querySelector('img').src, '_blank', 'noopener,noreferrer')));
 }
