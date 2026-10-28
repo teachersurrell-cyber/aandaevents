@@ -49,47 +49,33 @@ const treats = [
   { emoji: '🍪', name: 'cookie' }, { emoji: '🍍', name: 'pineapple' }
 ];
 const gameBoard = document.querySelector('#board');
-const gameMoves = document.querySelector('#moves');
-const gamePairs = document.querySelector('#pairs');
-const gameTimer = document.querySelector('#timer');
-const gameStatus = document.querySelector('#status');
-const gameStart = document.querySelector('#start-btn');
-const gameRestart = document.querySelector('#restart-btn');
-let firstCard = null, secondCard = null, gameLocked = true, gamePairsFound = 0;
-let gameStarted = false, gameFinished = false, gameSeconds = 0, gameTick = null, mismatchTimeout = null;
-
+let playerName = 'guest', guestCount = 1, firstCard = null, secondCard = null;
+let gameLocked = false, gameMovesCount = 0, gamePairsFound = 0, gameSeconds = 0, gameTick = null, mismatchTimeout = null;
 function shuffleGame(items) { const copy = [...items]; for (let i = copy.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [copy[i], copy[j]] = [copy[j], copy[i]]; } return copy; }
 function gameTime(value) { return `${String(Math.floor(value / 60)).padStart(2, '0')}:${String(value % 60).padStart(2, '0')}`; }
-function updateGameStats() { gameMoves.textContent = gameMovesCount; gamePairs.textContent = `${gamePairsFound} / ${treats.length}`; gameTimer.textContent = gameTime(gameSeconds); }
-let gameMovesCount = 0;
-function stopGameClock() { if (gameTick) clearInterval(gameTick); gameTick = null; }
-function startGameClock() { if (gameTick || gameFinished) return; gameTick = setInterval(() => { gameSeconds++; gameTimer.textContent = gameTime(gameSeconds); }, 1000); }
+function showGameScreen(name) { document.querySelectorAll('.game-screen').forEach(screen => screen.classList.toggle('active', screen.id === `game-${name}`)); }
+function updateGameStats() { document.querySelector('#moves').textContent = gameMovesCount; document.querySelector('#pairs').textContent = `${gamePairsFound} / 8`; document.querySelector('#timer').textContent = gameTime(gameSeconds); }
+function stopGameClock() { clearInterval(gameTick); gameTick = null; }
+function startGameClock() { if (gameTick) return; gameTick = setInterval(() => { gameSeconds++; document.querySelector('#timer').textContent = gameTime(gameSeconds); }, 1000); }
 function newGame() {
-  stopGameClock(); if (mismatchTimeout) clearTimeout(mismatchTimeout);
-  firstCard = secondCard = null; gameLocked = true; gameMovesCount = gamePairsFound = gameSeconds = 0; gameStarted = gameFinished = false;
-  updateGameStats(); gameStart.disabled = false; gameStart.textContent = '✨ Start playing'; gameStatus.textContent = 'Tap “Start playing” when you’re ready.';
-  gameBoard.innerHTML = '';
-  shuffleGame([...treats, ...treats].map((treat, index) => ({ ...treat, uid: `${treat.name}-${index}-${Math.random().toString(16).slice(2)}` }))).forEach((item, index) => {
-    const card = document.createElement('button'); card.type = 'button'; card.className = 'game-card'; card.disabled = true; card.dataset.name = item.name; card.setAttribute('aria-label', `Hidden card ${index + 1}`);
-    card.innerHTML = `<span class="game-card-inner"><span class="game-card-face game-card-back" aria-hidden="true"></span><span class="game-card-face game-card-front" aria-hidden="true">${item.emoji}</span></span>`;
-    card.addEventListener('click', () => flipGameCard(card, item, index)); gameBoard.appendChild(card);
-  });
+  stopGameClock(); clearTimeout(mismatchTimeout); firstCard = secondCard = null; gameLocked = false; gameMovesCount = gamePairsFound = gameSeconds = 0; updateGameStats(); document.querySelector('#status').textContent = 'Find two treats that match.'; gameBoard.innerHTML = '';
+  shuffleGame([...treats, ...treats]).forEach((item, index) => { const card = document.createElement('button'); card.type = 'button'; card.className = 'game-card'; card.dataset.name = item.name; card.setAttribute('aria-label', `Hidden card ${index + 1}`); card.innerHTML = `<span class="game-card-inner"><span class="game-card-face game-card-back" aria-hidden="true"></span><span class="game-card-face game-card-front" aria-hidden="true">${item.emoji}</span></span>`; card.addEventListener('click', () => flipGameCard(card, item, index)); gameBoard.appendChild(card); });
 }
-function beginGame() { if (gameStarted || gameFinished) return; gameStarted = true; gameLocked = false; [...gameBoard.children].forEach(card => card.disabled = false); gameStart.disabled = true; gameStart.textContent = 'Game in progress…'; gameStatus.textContent = 'Find two treats that match. Good luck!'; startGameClock(); }
 function flipGameCard(card, item, index) {
-  if (!gameStarted) beginGame(); if (gameLocked || card.classList.contains('is-open') || card.classList.contains('is-matched')) return;
-  card.classList.add('is-open'); card.setAttribute('aria-label', item.name);
+  if (gameLocked || card.classList.contains('is-open') || card.classList.contains('is-matched')) return;
+  if (!gameTick) startGameClock(); card.classList.add('is-open'); card.setAttribute('aria-label', item.name);
   if (!firstCard) { firstCard = { card, item, index }; return; }
   secondCard = { card, item, index }; gameLocked = true; gameMovesCount++; updateGameStats();
-  if (firstCard.item.name === secondCard.item.name) {
-    [firstCard, secondCard].forEach(entry => { entry.card.classList.remove('is-open'); entry.card.classList.add('is-matched'); entry.card.disabled = true; entry.card.setAttribute('aria-label', `Matched ${entry.item.name}`); });
-    gamePairsFound++; updateGameStats(); gameStatus.innerHTML = '<strong>Lovely match!</strong> Keep going.'; firstCard = secondCard = null; gameLocked = false;
-    if (gamePairsFound === treats.length) winGame();
-  } else { gameStatus.textContent = 'Not a match this time. Try to remember where they are!'; mismatchTimeout = setTimeout(() => { [firstCard, secondCard].forEach(entry => { entry.card.classList.remove('is-open'); entry.card.setAttribute('aria-label', `Hidden card ${entry.index + 1}`); }); firstCard = secondCard = null; gameLocked = false; }, 850); }
+  if (firstCard.item.name === secondCard.item.name) { [firstCard, secondCard].forEach(entry => { entry.card.classList.remove('is-open'); entry.card.classList.add('is-matched'); entry.card.setAttribute('aria-label', `Matched ${entry.item.name}`); }); gamePairsFound++; updateGameStats(); document.querySelector('#status').textContent = 'Lovely match — keep going!'; firstCard = secondCard = null; gameLocked = false; if (gamePairsFound === 8) winGame(); }
+  else { document.querySelector('#status').textContent = 'Not a match — remember those treats.'; mismatchTimeout = setTimeout(() => { [firstCard, secondCard].forEach(entry => { entry.card.classList.remove('is-open'); entry.card.setAttribute('aria-label', `Hidden card ${entry.index + 1}`); }); firstCard = secondCard = null; gameLocked = false; }, 850); }
 }
-function winGame() { gameFinished = true; gameLocked = true; stopGameClock(); gameStart.disabled = false; gameStart.textContent = '🎉 Play again'; const rating = gameMovesCount <= 12 ? 'event-planning superstar' : gameMovesCount <= 18 ? 'dessert detective' : 'treat-matching pro'; gameStatus.innerHTML = `<strong>You did it!</strong> All treats matched in ${gameMovesCount} moves and ${gameTime(gameSeconds)}. You’re a ${rating}!`; }
-gameStart.addEventListener('click', () => { if (gameFinished) { newGame(); beginGame(); return; } beginGame(); });
-gameRestart.addEventListener('click', newGame);
+function winGame() { stopGameClock(); document.querySelector('#winner-name').textContent = playerName; document.querySelector('#victory-moves').textContent = gameMovesCount; document.querySelector('#victory-time').textContent = gameTime(gameSeconds); document.querySelector('#victory-guests').textContent = guestCount; setTimeout(() => showGameScreen('victory'), 450); }
+document.querySelectorAll('[data-game-screen]').forEach(button => button.addEventListener('click', () => showGameScreen(button.dataset.gameScreen)));
+document.querySelector('#join-game-btn').addEventListener('click', () => { const name = document.querySelector('#player-name').value.trim(); if (!name) { document.querySelector('#game-form-error').textContent = 'Please enter your name to continue.'; return; } playerName = name; guestCount = document.querySelector('#guest-count').value; document.querySelector('#guest-name').textContent = playerName; showGameScreen('menu'); });
+document.querySelector('#quick-game-btn').addEventListener('click', () => { newGame(); showGameScreen('play'); });
+document.querySelector('#restart-btn').addEventListener('click', newGame);
+document.querySelector('#play-again-btn').addEventListener('click', () => { newGame(); showGameScreen('play'); });
+document.querySelector('#game-help-btn').addEventListener('click', () => { document.querySelector('#status').textContent = 'Turn over two cards at a time and match all eight pairs.'; showGameScreen('play'); });
 newGame();
 
 document.querySelector('#contactForm').addEventListener('submit', event => {

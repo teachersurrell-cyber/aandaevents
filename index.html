@@ -71,33 +71,27 @@
     </section>
 
     <section class="page inner-page game-page" id="game">
-      <header class="page-header"><p class="eyebrow dark">A little break</p><h1>Match the<br><em>celebration.</em></h1></header>
-      <div class="game-layout">
-        <div class="game-shell aa-game-shell" aria-labelledby="game-title">
-          <section class="intro aa-game-intro">
-            <p class="eyebrow">Flip • Find • Feast</p>
-            <h2 id="game-title">Table of <span>Treats</span></h2>
-            <p class="subtitle">Can you match all the delicious pairs? Find every matching treat in as few moves as possible.</p>
-          </section>
-          <section class="aa-game-area" aria-label="Memory matching game">
-            <div class="stats" aria-label="Game statistics">
-              <div class="stat"><strong id="moves">0</strong><span>Moves</span></div>
-              <div class="stat"><strong id="pairs">0 / 8</strong><span>Pairs found</span></div>
-              <div class="stat"><strong id="timer">00:00</strong><span>Time</span></div>
-            </div>
-            <div class="board" id="board" aria-label="Cards to match"></div>
-            <div class="game-controls">
-              <button class="game-btn game-btn-primary" id="start-btn" type="button">✨ Start playing</button>
-              <button class="game-btn game-btn-secondary" id="restart-btn" type="button">↻ New game</button>
-            </div>
-            <p class="game-status" id="status" role="status" aria-live="polite">Tap “Start playing” when you’re ready.</p>
-          </section>
-          <div class="game-bottom-cta">
-            <p>Good food. Great people. Beautiful moments.</p>
-            <a class="game-link-btn" href="#contact" data-page="contact" id="plan-link">Planning something special? Let’s talk <span aria-hidden="true">↗</span></a>
-            <div class="game-fine-print">A&amp;A EVENTS · MADE FOR CELEBRATING</div>
-          </div>
-        </div>
+      <div class="aa-game-app">
+        <nav class="game-navbar" aria-label="Game navigation">
+          <button class="game-nav-brand" type="button" data-game-screen="splash" aria-label="Game home"><img src="favicon.webp" alt=""><span>Table of Treats</span></button>
+          <div class="game-nav-actions"><button type="button" data-game-screen="menu">Menu</button><button type="button" id="game-help-btn">How to play</button><a href="#home" data-page="home">A&amp;A Home</a></div>
+        </nav>
+        <section class="game-screen active" id="game-splash">
+          <div class="game-splash-art" aria-hidden="true"><span>🍰</span><span>🥂</span><span>🍓</span><span>🧁</span></div>
+          <p class="game-eyebrow">A little celebration</p><h1>Table of <em>Treats</em></h1><p>Match every delicious pair and make your own moment of magic.</p><button class="game-btn game-btn-primary" type="button" data-game-screen="join">Play now <span>→</span></button>
+        </section>
+        <section class="game-screen" id="game-join">
+          <div class="game-form-card"><p class="game-eyebrow">Before we begin</p><h1>Who’s playing?</h1><label for="player-name">Your name</label><input id="player-name" maxlength="24" autocomplete="name" placeholder="Enter your name"><label for="guest-count">Guests joining you</label><select id="guest-count"><option value="1">Just me</option><option value="2">2 guests</option><option value="3">3 guests</option><option value="4">4 guests</option><option value="5">5 guests</option></select><p class="game-form-error" id="game-form-error" role="alert"></p><button class="game-btn game-btn-primary" id="join-game-btn" type="button">Continue</button></div>
+        </section>
+        <section class="game-screen" id="game-menu">
+          <div class="game-menu-heading"><p class="game-eyebrow">Good to see you, <span id="guest-name">guest</span></p><h1>Choose your<br><em>celebration.</em></h1></div><div class="game-menu-grid"><button class="game-mode-card" id="quick-game-btn" type="button"><span>01</span><strong>Quick match</strong><small>16 cards · 8 pairs</small><b>Play ↗</b></button><button class="game-mode-card secondary" type="button" data-game-screen="join"><span>02</span><strong>Change player</strong><small>Update your name and party</small><b>Edit ↗</b></button></div>
+        </section>
+        <section class="game-screen" id="game-play">
+          <div class="game-play-header"><div><p class="game-eyebrow">Flip · Find · Feast</p><h1>Find every pair</h1></div><div class="game-stats"><div><strong id="moves">0</strong><span>Moves</span></div><div><strong id="pairs">0 / 8</strong><span>Pairs</span></div><div><strong id="timer">00:00</strong><span>Time</span></div></div></div><div class="board" id="board" aria-label="Celebration memory cards"></div><p class="game-status" id="status" role="status" aria-live="polite">Find two treats that match.</p><button class="game-btn game-btn-secondary" id="restart-btn" type="button">↻ New game</button>
+        </section>
+        <section class="game-screen" id="game-victory">
+          <div class="game-victory-card"><div class="victory-mark">✓</div><p class="game-eyebrow">Celebration complete</p><h1>Beautifully matched,<br><em><span id="winner-name">player</span>.</em></h1><div class="victory-stats"><div><strong id="victory-moves">0</strong><span>Moves</span></div><div><strong id="victory-time">00:00</strong><span>Time</span></div><div><strong id="victory-guests">1</strong><span>Guests</span></div></div><div class="game-controls"><button class="game-btn game-btn-primary" id="play-again-btn" type="button">Play again</button><button class="game-btn game-btn-secondary" type="button" data-game-screen="menu">Main menu</button></div></div>
+        </section>
       </div>
     </section>
 
@@ -110,6 +104,6 @@
     </section>
   </main>
   <footer><a class="brand footer-brand brand-logo" href="#home" data-page="home" aria-label="A&A Events home"><img src="favicon.webp" alt="A&amp;A Events logo"></a><p>Good food. Great people.<br>Beautiful moments.</p><a href="#contact" data-page="contact">Plan an event ↗</a><small>© <span id="year"></span> A&amp;A Events</small></footer>
-  <script src="script.js?v=6"></script>
+  <script src="script.js?v=7"></script>
 </body>
 </html>
