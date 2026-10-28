@@ -22,6 +22,8 @@ menuToggle.addEventListener('click', () => {
 window.addEventListener('hashchange', () => showPage(location.hash.slice(1)));
 
 const menus = {
+  packages: [['Luxury Package','Per person · US$10.00'],['Premium Package','Per person · US$8.00'],['Deluxe Package','Per person · US$6.00'],['Classic Package — most popular','Per person · US$5.00'],['Home Dinner Package','Per person · US$4.00'],['Braai Package','Per person · US$3.00']],
+  decor: [['Balloon Garland','US$80–US$150'],['Red Carpet','US$20.00'],['Cake Table','US$10.00'],['Backdrops','Floral, white round, 3D silver or 3D gold · US$25.00'],['Tent','US$120.00 · Price excludes transport and pitching labour'],['His and Hers Chairs','Each · US$15.00'],['Roora Package','US$5–US$10 per person, depending on requirements']],
   canapes: [['Garden & sea','Cucumber, mint & pea crostini; oyster with green apple; smoked salmon roulade.'],['From the hearth','Wild mushroom tartlet; harissa chicken skewer; crispy halloumi with fig.'],['Something sweet','Mini lemon posset; chocolate ganache tart; raspberry & rose macaron.']],
   mains: [['Supper table','Slow-roasted lamb shoulder, rosemary potatoes and vibrant seasonal vegetables.'],['From the garden','Herb-roasted chicken, buttery greens and lemon pan jus.'],['Plant-forward','Roasted squash & lentil Wellington with sage gravy.']],
   sweet: [['Celebration cake','Vanilla bean, chocolate ganache, lemon elderflower and seasonal fruit tiers.'],['After dinner','Mini pavlovas, espresso pots and bite-sized financiers.'],['The finishing touch','Cheese selection, spiced chutney, grapes and artisan crackers.']]
@@ -34,7 +36,7 @@ document.querySelectorAll('[data-menu]').forEach(button => button.addEventListen
   button.classList.add('active');
   renderMenu(button.dataset.menu);
 }));
-renderMenu('canapes');
+renderMenu('packages');
 
 const symbols = ['🥂','🍰','🌿','🕯️'];
 const board = document.querySelector('#memoryBoard');
